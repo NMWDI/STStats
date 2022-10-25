@@ -36,11 +36,31 @@ last_time = None
 cached_report = None
 
 
+def aggregate_stats():
+    def rget(url):
+        resp = requests.get(url)
+        if resp.status_code == 200:
+            rj = resp.json()
+            nextlink = rj.get('@iot.nextLink')
+            yield rj['value']
+            if nextlink:
+                yield from rget(nextlink)
+
+    names = []
+    for v in rget(f'{ST2}/Datastreams?$select=name'):
+        for vi in v:
+            if vi['name'] not in names:
+                names.append(vi['name'])
+    return {'datastream_names': names}
+
+
 def st2_report():
     global last_time
     global cached_report
     if not cached_report or (last_time and time.time() - last_time > 60):
         last_time = time.time()
+        agg_stats = aggregate_stats()
+
         obsprops = st2_get("ObservedProperties")
         obsprops = [o['name'] for o in obsprops['value']]
 
@@ -58,7 +78,7 @@ def st2_report():
                   "datastreams": st2_count("Datastreams"),
                   "observations": st2_count("Observations"),
                   "depth_to_water_datastreams": st2_count("Datastreams", f="$filter=name eq 'Groundwater Levels'"),
-                  "datastream_names": 0,
+                  "datastream_names": agg_stats['datastream_names'],
                   "observed_properties": obsprops,
                   "min_observed_datetime": mind,
                   "max_observed_datetime": maxd,
@@ -77,3 +97,7 @@ async def get_st2_report():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
+
+if __name__ == '__main__':
+    aggregate_stats()
