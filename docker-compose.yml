@@ -47,8 +47,7 @@ services:
       - "traefik.http.routers.api-insecure.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/api/v1`)"
       - "traefik.http.routers.api-insecure.entrypoints=web"
       - "traefik.http.routers.api-insecure.middlewares=force-secure"
-      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
+
     restart: on-failure
 
 #  db:
@@ -84,6 +83,8 @@ services:
       - "--certificatesresolvers.myresolver.acme.email=foobar@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=acme.json"
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--http.middlewares.force-secure.redirectscheme.scheme=https"
+      - "--http.middlewares.force-secure.redirectscheme.permanent=true"
     ports:
       - "80:80"
       - "8080:8080"
