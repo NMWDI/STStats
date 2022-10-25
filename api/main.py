@@ -93,7 +93,8 @@ def st2_report():
                   "max_observed_datetime": maxd,
                   "future_obs": future_obs['@iot.count'],
                   "@report.timestamp": now,
-                  "@report.duration": time.time()-last_time
+                  "@report.duration": time.time()-last_time,
+                  "@report.sturl": ST2
                   }
         report.update(agg_stats)
         cached_report = report
