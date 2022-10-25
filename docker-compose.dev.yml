@@ -19,18 +19,18 @@ services:
 #      - "traefik.enable=true"
 #      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
 #      - "traefik.http.routers.frontend.entrypoints=web"
-#  juypter:
-#    build:
-#      context: ./jupyter/
-#      dockerfile: ./Dockerfile
-#    depends_on:
-#      - traefik
-#    ports:
-#      - "8008:8008"
-#    labels:
-#      - "traefik.enable=true"
-#      - "traefik.http.routers.jupyter.rule=Host(`localhost`) && PathPrefix(`/lab`)"
-#      - "traefik.http.routers.jupyter.entrypoints=web"
+  juypter:
+    build:
+      context: ./jupyter/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - traefik
+    ports:
+      - "8008:8008"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jupyter.rule=Host(`localhost`)"
+      - "traefik.http.routers.jupyter.entrypoints=web"
 #      - "traefik.http.routers.jupyter.middlewares=jupyter-sp"
 #      - "traefik.http.middlewares.jupyter-sp.stripprefix.prefixes=/jupyter"
 #      - "traefik.http.middlewares.jupyter-sp.stripprefix.forceSlash=false"
