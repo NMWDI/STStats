@@ -13,8 +13,8 @@ ST2 = 'https://st2.newmexicowaterdata.org/FROST-Server/v1.1'
 
 
 
-def st2_count(tag, f=None):
-    url = f'{ST2}/{tag}?$count=true&$top=1'
+def st_count(url, tag, f=None):
+    url = f'{url}/{tag}?$count=true&$top=1'
     if f:
         url = f'{url}&{f}'
 
@@ -25,9 +25,9 @@ def st2_count(tag, f=None):
         return 0
 
 
-def st2_get(tag):
-    url = f'{ST2}/{tag}'
-    resp = requests.get(f'{ST2}/{tag}')
+def st_get(url, tag):
+    url = f'{url}/{tag}'
+    resp = requests.get(url)
     return resp.json()
 
 
@@ -64,25 +64,29 @@ def aggregate_stats():
     return {'datastream_names': names, 'agencies_location_counts': agencies}
 
 
-def st2_report():
+def st_report(url, tag):
     global last_time
     global cached_report
+
     if not cached_report or (last_time and time.time() - last_time > 60):
+        def st2_count(*args, **kw):
+            return st_count(url, *args, **kw)
+
         last_time = time.time()
         agg_stats = aggregate_stats()
 
-        obsprops = st2_get("ObservedProperties")
+        obsprops = st_get(url, "ObservedProperties")
         obsprops = [o['name'] for o in obsprops['value']]
 
-        maxd = st2_get('Observations?$orderby=phenomenonTime desc&$top=1')
-        mind = st2_get('Observations?$orderby=phenomenonTime asc&$top=1')
+        maxd = st_get(url, 'Observations?$orderby=phenomenonTime desc&$top=1')
+        mind = st_get(url, 'Observations?$orderby=phenomenonTime asc&$top=1')
         mind = mind['value'][0]['phenomenonTime']
         maxd = maxd['value'][0]['phenomenonTime']
 
         now = datetime.now()
         now = now.strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
-        future_obs = st2_get(f"Observations?$filter=phenomenonTime gt {now}&$top=1&$count=true")
+        future_obs = st_get(url, f"Observations?$filter=phenomenonTime gt {now}&$top=1&$count=true")
         report = {"locations": st2_count("Locations"),
                   "things": st2_count("Things"),
                   "datastreams": st2_count("Datastreams"),
@@ -94,7 +98,7 @@ def st2_report():
                   "future_obs": future_obs['@iot.count'],
                   "@report.timestamp": now,
                   "@report.duration": time.time()-last_time,
-                  "@report.sturl": ST2
+                  "@report.sturl": url
                   }
         report.update(agg_stats)
         cached_report = report
@@ -102,20 +106,20 @@ def st2_report():
     return cached_report
 
 
-def st2_report_poll():
+def st_report_poll():
     while 1:
-        st2_report()
+        st_report(ST2, 'st2')
         time.sleep(60)
 
 
-t = Thread(target=st2_report_poll)
+t = Thread(target=st_report_poll)
 t.setDaemon(True)
 t.start()
 
 
 @app.get('/st2_report')
 async def get_st2_report():
-    return st2_report()
+    return st_report(ST2, 'st2')
 
 
 @app.get("/hello/{name}")
