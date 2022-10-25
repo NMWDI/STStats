@@ -1,5 +1,7 @@
 import time
+from collections import Counter
 from datetime import datetime
+from threading import Thread
 
 from fastapi import FastAPI
 import requests
@@ -7,6 +9,8 @@ import requests
 app = FastAPI()
 
 ST2 = 'https://st2.newmexicowaterdata.org/FROST-Server/v1.1'
+
+
 
 
 def st2_count(tag, f=None):
@@ -51,7 +55,13 @@ def aggregate_stats():
         for vi in v:
             if vi['name'] not in names:
                 names.append(vi['name'])
-    return {'datastream_names': names}
+
+    agencies = Counter()
+    for v in rget(f'{ST2}/Locations?$select=properties'):
+        for vi in v:
+            agencies.update((vi['properties']['agency'],))
+
+    return {'datastream_names': names, 'agencies_location_counts': agencies}
 
 
 def st2_report():
@@ -59,6 +69,7 @@ def st2_report():
     global cached_report
     if not cached_report or (last_time and time.time() - last_time > 60):
         last_time = time.time()
+        print('generating st2 report')
         agg_stats = aggregate_stats()
 
         obsprops = st2_get("ObservedProperties")
@@ -78,15 +89,27 @@ def st2_report():
                   "datastreams": st2_count("Datastreams"),
                   "observations": st2_count("Observations"),
                   "depth_to_water_datastreams": st2_count("Datastreams", f="$filter=name eq 'Groundwater Levels'"),
-                  "datastream_names": agg_stats['datastream_names'],
                   "observed_properties": obsprops,
                   "min_observed_datetime": mind,
                   "max_observed_datetime": maxd,
                   "future_obs": future_obs['@iot.count']
                   }
+        report.update(agg_stats)
 
         cached_report = report
+        print(f'report generation complete {time.time()-last_time}')
     return cached_report
+
+
+def st2_report_poll():
+    while 1:
+        st2_report()
+        time.sleep(60)
+
+
+t = Thread(target=st2_report_poll)
+t.setDaemon(True)
+t.start()
 
 
 @app.get('/st2_report')
