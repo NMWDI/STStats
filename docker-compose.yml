@@ -39,15 +39,15 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/api/v1`)"
       - "traefik.http.routers.api.entrypoints=websecure"
-      - "traefik.http.routers.api.tls=true"
+#      - "traefik.http.routers.api.tls=true"
       - "traefik.http.routers.api.tls.certresolver=myresolver"
       - "traefik.http.routers.api.middlewares=api-sp"
       - "traefik.http.middlewares.api-sp.stripprefix.prefixes=/api/v1"
       - "traefik.http.middlewares.api-sp.stripprefix.forceSlash=false"
       - "traefik.http.routers.api-insecure.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/api/v1`)"
       - "traefik.http.routers.api-insecure.entrypoints=web"
-      - "traefik.http.routers.api-insecure.middlewares=force-secure"
-      - "traefik.http.routers.api-insecure.middlewares=api-https"
+#      - "traefik.http.routers.api-insecure.middlewares=force-secure"
+#      - "traefik.http.routers.api-insecure.middlewares=api-https"
 #      - "traefik.http.middlewares.api-https.redirectscheme.scheme=https"
 
     restart: on-failure
