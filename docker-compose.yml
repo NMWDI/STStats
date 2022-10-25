@@ -46,6 +46,7 @@ services:
       - "traefik.http.middlewares.api-sp.stripprefix.forceSlash=false"
       - "traefik.http.routers.api-insecure.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/api/v1`)"
       - "traefik.http.routers.api-insecure.entrypoints=web"
+      - "traefik.http.routers.api-insecure.middlewares=api-sp"
 #      - "traefik.http.routers.api-insecure.middlewares=force-secure"
 #      - "traefik.http.routers.api-insecure.middlewares=api-https"
 #      - "traefik.http.middlewares.api-https.redirectscheme.scheme=https"
