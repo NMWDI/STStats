@@ -14,10 +14,11 @@ COPY ./requirements.txt .
 
 #
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
-
+RUN pip install --pre jupyterlite
 
 #
 COPY . .
 
-
-
+RUN jupyter lite init
+RUN jupyter lite build --contents content
+CMD ["jupyter", "lite", "serve", "--port", "8008"]

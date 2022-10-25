@@ -69,7 +69,6 @@ def st2_report():
     global cached_report
     if not cached_report or (last_time and time.time() - last_time > 60):
         last_time = time.time()
-        print('generating st2 report')
         agg_stats = aggregate_stats()
 
         obsprops = st2_get("ObservedProperties")
@@ -92,12 +91,13 @@ def st2_report():
                   "observed_properties": obsprops,
                   "min_observed_datetime": mind,
                   "max_observed_datetime": maxd,
-                  "future_obs": future_obs['@iot.count']
+                  "future_obs": future_obs['@iot.count'],
+                  "@report.timestamp": now,
+                  "@report.duration": time.time()-last_time
                   }
         report.update(agg_stats)
-
         cached_report = report
-        print(f'report generation complete {time.time()-last_time}')
+        # print(f'report generation complete {time.time()-last_time}')
     return cached_report
 
 
