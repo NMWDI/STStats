@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apt update
-RUN apt install libsqlite3-mod-spatialite -y
+#RUN apt install libsqlite3-mod-spatialite -y
 #
 COPY ./requirements.txt .
 
