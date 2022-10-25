@@ -31,10 +31,10 @@ services:
     volumes:
       - ./api:/api
     depends_on:
-      - db
+#      - db
       - traefik
-    env_file:
-      - ./api/.env
+#    env_file:
+#      - ./api/.env
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`localhost`) && PathPrefix(`/api/v1`)"

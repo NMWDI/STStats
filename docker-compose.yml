@@ -48,7 +48,7 @@ services:
       - "traefik.http.routers.api-insecure.entrypoints=web"
       - "traefik.http.routers.api-insecure.middlewares=force-secure"
       - "traefik.http.routers.api-insecure.middlewares=api-https"
-      - "traefik.http.middlewares.api-https.redirectscheme.scheme=https"
+#      - "traefik.http.middlewares.api-https.redirectscheme.scheme=https"
 
     restart: on-failure
 
