@@ -2,15 +2,13 @@ import time
 from collections import Counter
 from datetime import datetime
 from threading import Thread
-
+from jsonschema import validate, ValidationError
 from fastapi import FastAPI
 import requests
 
 app = FastAPI()
 
 ST2 = 'https://st2.newmexicowaterdata.org/FROST-Server/v1.1'
-
-
 
 
 def st_count(url, tag, f=None):
@@ -97,7 +95,7 @@ def st_report(url, tag):
                   "max_observed_datetime": maxd,
                   "future_obs": future_obs['@iot.count'],
                   "@report.timestamp": now,
-                  "@report.duration": time.time()-last_time,
+                  "@report.duration": time.time() - last_time,
                   "@report.sturl": url
                   }
         report.update(agg_stats)
@@ -120,6 +118,30 @@ t.start()
 @app.get('/st2_report')
 async def get_st2_report():
     return st_report(ST2, 'st2')
+
+
+LOCATION_SCHEMA = None
+
+
+@app.get('/st2_validate')
+async def get_st2_validation():
+    global LOCATION_SCHEMA
+    url = ST2
+    if LOCATION_SCHEMA is None:
+        resp = requests.get('https://raw.githubusercontent.com/NMWDI/VocabService/main/schemas/location.schema.json#')
+        LOCATION_SCHEMA = resp.json()
+
+    failures = []
+    # for agency in ('NMBGMR', 'EBID'):
+    for agency in ('NMBGMR', 'EBID'):
+        locations = st_get(url, f"Locations?$top=10&$filter=properties/agency eq '{agency}'")
+        for location in locations['value']:
+            try:
+                validate(location, LOCATION_SCHEMA)
+            except ValidationError  as e:
+                failures.append(e)
+
+    return failures
 
 
 @app.get("/hello/{name}")
