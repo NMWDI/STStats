@@ -19,23 +19,47 @@ services:
 #      - "traefik.enable=true"
 #      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
 #      - "traefik.http.routers.frontend.entrypoints=web"
-  juypter:
+#  juypter:
+#    build:
+#      context: ./jupyter/
+#      dockerfile: ./Dockerfile
+#    depends_on:
+#      - traefik
+#    ports:
+#      - "8008:8008"
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.jupyter.rule=Host(`localhost`)"
+#      - "traefik.http.routers.jupyter.entrypoints=web"
+##      - "traefik.http.routers.jupyter.middlewares=jupyter-sp"
+##      - "traefik.http.middlewares.jupyter-sp.stripprefix.prefixes=/jupyter"
+##      - "traefik.http.middlewares.jupyter-sp.stripprefix.forceSlash=false"
+##      - "traefik.http.routers.jupyter.rule=Host(`localhost`) && PathPrefix(`/jupyter`)"
+##    restart: on-failure
+  developer:
     build:
-      context: ./jupyter/
-      dockerfile: ./Dockerfile
-    depends_on:
-      - traefik
+        context: documentation/
+        dockerfile: ./Dockerfile_dev
+    command: bash -c "
+      gunicorn developer.main:app -b 0.0.0.0:8001
+      "
     ports:
-      - "8008:8008"
+      - "8001:8001"
+    volumes:
+      - ./developer:/developer
+    depends_on:
+      #      - db
+      - traefik
+    #    env_file:
+    #      - ./api/.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jupyter.rule=Host(`localhost`)"
-      - "traefik.http.routers.jupyter.entrypoints=web"
-#      - "traefik.http.routers.jupyter.middlewares=jupyter-sp"
-#      - "traefik.http.middlewares.jupyter-sp.stripprefix.prefixes=/jupyter"
-#      - "traefik.http.middlewares.jupyter-sp.stripprefix.forceSlash=false"
-#      - "traefik.http.routers.jupyter.rule=Host(`localhost`) && PathPrefix(`/jupyter`)"
-#    restart: on-failure
+      - "traefik.http.routers.developer.rule=Host(`localhost`) && PathPrefix(`/help`)"
+      - "traefik.http.routers.developer.entrypoints=web"
+      - "traefik.http.routers.developer.middlewares=developer-sp"
+      - "traefik.http.middlewares.developer-sp.stripprefix.prefixes=/help"
+      - "traefik.http.middlewares.developer-sp.stripprefix.forceSlash=false"
+    restart: on-failure
 
   api:
     build:

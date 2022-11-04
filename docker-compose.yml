@@ -19,6 +19,31 @@ services:
 #      - "traefik.enable=true"
 #      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
 #      - "traefik.http.routers.frontend.entrypoints=web"
+  documentation:
+    build:
+      context: documentation/
+      dockerfile: ./Dockerfile
+    command: bash -c "
+      gunicorn documentation.main:app -b 0.0.0.0:8001
+      "
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./documentation:/documentation
+    depends_on:
+      #      - db
+      - traefik
+    #    env_file:
+    #      - ./api/.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.documentation.rule=Host(`localhost`) && PathPrefix(`/help`)"
+      - "traefik.http.routers.documentation.entrypoints=web"
+      - "traefik.http.routers.documentation.middlewares=documentation-sp"
+      - "traefik.http.middlewares.documentation-sp.stripprefix.prefixes=/help"
+      - "traefik.http.middlewares.documentation-sp.stripprefix.forceSlash=false"
+    restart: on-failure
+
   api:
     build:
       context: ./api/

@@ -121,27 +121,122 @@ async def get_st2_report():
 
 
 LOCATION_SCHEMA = None
+THING_SCHEMA = None
+THING_SCHEMA = {
+    "$id": "https://vocab.newmexicowaterdata.org/schemas/gwl_thing",
+    "title": "NMWDI Groundwater Level Thing Schema",
+    "description": "",
+    "version": "0.0.1",
+    "type": "object",
+    "required": ["name", "description", "properties"],
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "name of a Thing for groundwater levels should be `Water Well`"
+        },
+        "description": {
+            "type": "string",
+            "description": "description of this location"
+        },
+        "properties": {
+            "type": "object",
+            "description": "a flexible place to associate additional attributes with a thing",
+            "required": ["welldepth", "welldepth_unit", "geologic_formation"],
+            "welldepth": {
+                "type": "number",
+                "description": ""
+            },
+            "welldepth_unit": {
+                "type": "string",
+                "enum": [
+                    "FTBGS",
+                    "MBGS"
+                ],
+                "description": ""
+            },
+            "geologic_formation":
+                {
+                    "type": "string",
+                    "description": ""
+                }
+        }
+    }
+}
 
+DATASTREAM_SCHEMA = {
+    "$id": "https://vocab.newmexicowaterdata.org/schemas/gwl_thing",
+    "title": "NMWDI Groundwater Level Thing Schema",
+    "description": "",
+    "version": "0.0.1",
+    "type": "object",
+    "required": ["name", "description", "properties"],
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "name for Groundwater levels",
+            "enum": ["Groundwater Levels", "Groundwater Levels(Acoustic)", "Groundwater Levels(Pressure)"]
+        },
+        "description": {
+            "type": "string",
+            "description": "description of this location"
+        },
+        "properties": {
+            "required": ["topic"],
+            "type": "object",
+            "description": "a flexible place to associate additional attributes with a thing",
+            "topic": {"type": "string",
+                      "enum": ["Water Quantity"]}
+        }
+    }
+}
 
 @app.get('/st2_validate')
 async def get_st2_validation():
-    global LOCATION_SCHEMA
-    url = ST2
+    return validation(ST2)
+
+
+def validation(url):
+    global LOCATION_SCHEMA, THING_SCHEMA, DATASTREAM_SCHEMA
+
     if LOCATION_SCHEMA is None:
         resp = requests.get('https://raw.githubusercontent.com/NMWDI/VocabService/main/schemas/location.schema.json#')
         LOCATION_SCHEMA = resp.json()
 
-    failures = []
-    # for agency in ('NMBGMR', 'EBID'):
+    if THING_SCHEMA is None:
+        resp = requests.get(
+            'https://raw.githubusercontent.com/NMWDI/VocabService/main/schemas/groundwaterlevel.thing.schema.json#')
+        THING_SCHEMA = resp.json()
+
+    if DATASTREAM_SCHEMA is None:
+        resp = requests.get(
+            'https://raw.githubusercontent.com/NMWDI/VocabService/main/schemas/groundwaterlevel.datastream.schema.json#'
+        )
+        DATASTREAM_SCHEMA = resp.json()
+
+    flocations = []
+    fthings = []
+    fdatastreams = []
     for agency in ('NMBGMR', 'EBID'):
-        locations = st_get(url, f"Locations?$top=10&$filter=properties/agency eq '{agency}'")
+        locations = st_get(url, f"Locations?$top=10&$filter=properties/agency eq '{agency}'&$expand=Things/Datastreams")
         for location in locations['value']:
             try:
                 validate(location, LOCATION_SCHEMA)
-            except ValidationError  as e:
-                failures.append(e)
+            except ValidationError as e:
+                flocations.append(e)
 
-    return failures
+            for thing in location['Things']:
+                try:
+                    validate(thing, THING_SCHEMA)
+                except ValidationError as e:
+                    fthings.append(e)
+
+                for datastream in thing['Datastreams']:
+                    try:
+                        validate(datastream, DATASTREAM_SCHEMA)
+                    except ValidationError as e:
+                        fdatastreams.append(e)
+
+    return flocations, fthings, fdatastreams
 
 
 @app.get("/hello/{name}")
@@ -150,4 +245,9 @@ async def say_hello(name: str):
 
 
 if __name__ == '__main__':
-    aggregate_stats()
+    fl, ft, fds = validation(ST2)
+    print(len(fl), len(ft), len(fds))
+    for f in fds:
+        print(f)
+
+    # aggregate_stats()
