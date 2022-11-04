@@ -36,29 +36,29 @@ services:
 ##      - "traefik.http.middlewares.jupyter-sp.stripprefix.forceSlash=false"
 ##      - "traefik.http.routers.jupyter.rule=Host(`localhost`) && PathPrefix(`/jupyter`)"
 ##    restart: on-failure
-  developer:
+  documentation:
     build:
         context: documentation/
         dockerfile: ./Dockerfile_dev
     command: bash -c "
-      gunicorn developer.main:app -b 0.0.0.0:8001
+      gunicorn documentation.main:app -b 0.0.0.0:8001
       "
     ports:
       - "8001:8001"
     volumes:
-      - ./developer:/developer
+      - ./documentation:/documentation
     depends_on:
       #      - db
       - traefik
-    #    env_file:
+    #    env_file:oc
     #      - ./api/.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.developer.rule=Host(`localhost`) && PathPrefix(`/help`)"
-      - "traefik.http.routers.developer.entrypoints=web"
-      - "traefik.http.routers.developer.middlewares=developer-sp"
-      - "traefik.http.middlewares.developer-sp.stripprefix.prefixes=/help"
-      - "traefik.http.middlewares.developer-sp.stripprefix.forceSlash=false"
+      - "traefik.http.routers.documentation.rule=Host(`localhost`) && PathPrefix(`/help`)"
+      - "traefik.http.routers.documentation.entrypoints=web"
+      - "traefik.http.routers.documentation.middlewares=documentation-sp"
+      - "traefik.http.middlewares.documentation-sp.stripprefix.prefixes=/help"
+      - "traefik.http.middlewares.documentation-sp.stripprefix.forceSlash=false"
     restart: on-failure
 
   api:
