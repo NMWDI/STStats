@@ -28,7 +28,7 @@ one optional keyword argument <code>agency</code>.
         import requests
         def get_locations(agency=None):
 
-            url = f"https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations"
+            url = "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations"
 
             if agency:
                 url = f"{url}?$filter=properties/agency eq '{agency}"
