@@ -7,10 +7,20 @@
 <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/python.min.js"></script>-->
 
 {% endblock %}
+{% block pagetitle %}
+{% if page %}
+    <h1>Page {{ page }}: {{page_description}}</h1>
+{% else %}
+    <h1>{{page_description}}</h1>
+{% endif %}
+
+{% endblock %}
+
 
 {% block content %}
+
 {% endblock %}
 
 {% block tailscript %}
-<script>hljs.initHighlightingOnLoad();</script>
+<script>hljs.highlightAll();</script>
 {% endblock %}
