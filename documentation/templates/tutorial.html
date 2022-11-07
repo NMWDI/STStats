@@ -18,7 +18,7 @@
 <hr/>
 <p>
 The function <code>get_locations</code> uses the <code>requests</code> package
-to send a <b>HTTP GET</b> to the <b>ST2</b> endpoint. <code>get_locations</code> takes
+to send a <code>HTTP GET</code> to the <b>ST2</b> endpoint. <code>get_locations</code> takes
 one optional keyword argument <code>agency</code>.
 </p>
 
@@ -116,10 +116,26 @@ So you've made it this far, Congratulations! You can get data from <b>ST2</b> bo
 But you've noticed something. You've tried to get all the <b>Locations</b> for <i>NMBGMR</i> but only 1000 locations
 were returned, and you know that <i>NMBGMR</i> has more than 1000 <b>Locations</b> available.
 
+<div class="note">
 <hr/>
 Checkout <a href="/api/v1/st2_report">"Whats in ST2"</a> to see the number of locations per agency
 <hr/>
 
+</div>
+
+
+Examining the JSON document will provide the solution...
+<br/><br/><br/>
+
+If more records are available for a given query*, there will be a  <code>@iot.nextLink</code> key. This is the <code>
+    url</code> for the next (up to)
+1000 records
+
+<hr/>
+<div class="note">
+    <p><strong>NOTE</strong>: The number of records returned by <b>ST2</b> for any given <code>HTTP GET</code> is
+    limited to 1000.</p>
+</div>
 
 
 
