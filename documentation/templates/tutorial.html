@@ -28,7 +28,8 @@ one optional keyword argument <code>agency</code>.
         import requests
         def get_locations(agency=None):
 
-            url = f"{base}/Locations"
+            url = f"https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations"
+
             if agency:
                 url = f"{url}?$filter=properties/agency eq '{agency}"
             resp = requests.get(url)
@@ -98,14 +99,15 @@ And example response will be a <code>JSON</code> document.
 If you look closely at the <code>get_locations</code> function you will see that it assembles an <code>url</code> and
     then sends an
 <b>HTTP GET</b> to that <code>url</code>.  For example, if you want to get all the <b>Locations</b> for <i>EBID</i>
-the url will be <code>https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq
+    the <code>url</code> will be
+    <code>https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq
     'EBID'</code>
 </p>
 <p></p>
 
 <p>
 Try it yourself! Copy the <code>url</code> into your browser address bar and you should see the 2 <b>Locations</b> for
-<i>EBID</i> in the <b>ST2</b> endpoint displays as a <code>JSON</code> document
+<i>EBID</i> in the <b>ST2</b> endpoint displayed as a <code>JSON</code> document
 
 </p>
 <hr/>
