@@ -14,7 +14,7 @@ def tutorial(page):
 
 @app.route("/")
 def help_link():
-    return render_template('help_link.html')
+    return render_template('index.html')
 
 
 
