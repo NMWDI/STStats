@@ -2,7 +2,7 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-DESCRIPTIONS = ['Start', 'Getting More Data', 'Writing to CSV']
+DESCRIPTIONS = ['Start', 'Getting More Data', 'Writing to CSV', 'JSON Schema']
 
 @app.route("/tutorial/<int:page>")
 def tutorial(page):
