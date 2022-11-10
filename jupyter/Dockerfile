@@ -21,4 +21,4 @@ COPY . .
 
 RUN jupyter lite init
 RUN jupyter lite build --contents content
-CMD ["jupyter", "lite", "serve", "--port", "8008"]
+#CMD ["jupyter", "lite", "serve", "--port", "8008"]
