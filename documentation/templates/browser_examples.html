@@ -20,7 +20,25 @@
         </code>
     </a>
 </p>
+<p>
+    Get all Locations and Things with a Location name that startswith 'AR-'<br/>
+    <a
+            href="https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=startswith(name,'AR-')&$expand=Things">
+        <code>
+            https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=startswith(name,'AR-')&$expand=Things
+        </code>
+    </a>
+</p>
 
+<p>
+    Get all Locations and Things within a given bounding box defined by latitudes and longitudes<br/>
+    <a
+            href="https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=st_within(location, geography'POLYGON((-106.9466 34.1201,-106.8038 34.1201,-106.8038 34.0086,-106.9466 34.0086,-106.9466 34.1201))')&$expand=Things">
+        <code>
+            https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=st_within(location, geography'POLYGON((-106.9466 34.1201,-106.8038 34.1201,-106.8038 34.0086,-106.9466 34.0086,-106.9466 34.1201))')&$expand=Things
+        </code>
+    </a>
+</p>
 
 For more query option examples see <a href="https://developers.sensorup.com/docs/#queryparameters">ST docs</a>
 {% endblock %}
