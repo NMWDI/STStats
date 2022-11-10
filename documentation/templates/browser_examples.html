@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>
+    Get all Locations from EBID<br/>
+    <a href="https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq 'EBID'">
+        <code>
+            https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq 'EBID'
+        </code>
+    </a>
+</p>
+
+<p>
+    Get all Locations and Things from EBID<br/>
+    <a
+            href="https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq 'EBID'&$expand=Things">
+        <code>
+            https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq
+            'EBID'&$expand=Things
+        </code>
+    </a>
+</p>
+
+
+For more query option examples see <a href="https://developers.sensorup.com/docs/#queryparameters">ST docs</a>
+{% endblock %}

@@ -12,6 +12,11 @@ def tutorial(page):
                            page=page, page_description=page_description)
 
 
+@app.route("/browser_examples")
+def examples():
+    return render_template('browser_examples.html')
+
+
 @app.route("/")
 def help_link():
     return render_template('index.html')
