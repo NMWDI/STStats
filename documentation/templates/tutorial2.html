@@ -25,7 +25,7 @@ In this section we will demonstrate how to write data to a csv file.
 </pre>
 
 
-Used in conjunction with out <code>get_locations</code> function our complete script might look something like
+Used in conjunction with our <code>get_locations</code> function our complete script might look something like
 <pre>
     <code>
 
@@ -41,13 +41,13 @@ Used in conjunction with out <code>get_locations</code> function our complete sc
             return resp.json()
 
     def write_to_csv(json_data, output):
-            header='name,description,latitude,longitude,agency'
-            with open(output, 'w') as wfile:
-                wfile.write(header)
-                for li in json_data['values']:
+        header='name,description,latitude,longitude,agency'
+        with open(output, 'w') as wfile:
+            wfile.write(header)
+            for li in json_data['values']:
 
-                    row = ','.join([str(v) for v in make_location_row(li)])
-                    wfile.write(f'{row}\n')
+                row = ','.join([str(v) for v in make_location_row(li)])
+                wfile.write(f'{row}\n')
 
     def make_location_row(location)
         lat = location['location']['coordinates'][1]
