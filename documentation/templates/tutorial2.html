@@ -35,7 +35,7 @@ Used in conjunction with our <code>get_locations</code> function our complete sc
         url = "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations"
 
         if agency:
-            url = f"{url}?$filter=properties/agency eq '{agency}"
+            url = f"{url}?$filter=properties/agency eq '{agency}'"
         resp = requests.get(url)
         if resp.status_code==200:
             return resp.json()
