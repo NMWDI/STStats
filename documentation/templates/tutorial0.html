@@ -16,18 +16,16 @@ one optional keyword argument <code>agency</code>.
 </p>
 
 <pre>
-<!--    <code class="language-python">-->
-    <code>
-        import requests
-        def get_locations(agency=None):
+    <code>import requests
+def get_locations(agency=None):
 
-            url = "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations"
+    url = "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations"
 
-            if agency:
-                url = f"{url}?$filter=properties/agency eq '{agency}"
-            resp = requests.get(url)
-            if resp.status_code==200:
-                return resp.json()
+    if agency:
+        url = f"{url}?$filter=properties/agency eq '{agency}"
+    resp = requests.get(url)
+    if resp.status_code==200:
+        return resp.json()
     </code>
 </pre>
 
