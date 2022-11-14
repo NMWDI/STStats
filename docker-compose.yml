@@ -112,8 +112,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.email=foobar@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=acme.json"
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=websecure"
-      - "--traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
-      - "--traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
+
     ports:
       - "80:80"
       - "8080:8080"
