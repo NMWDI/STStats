@@ -15,9 +15,10 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.jupyter.rule=Host(`developer.newmexicowaterdata.org`)"
       - "traefik.http.routers.jupyter.entrypoints=web"
-      - "traefik.http.routers.jupyter.entrypoints=websecure"
-      - "traefik.http.routers.jupyter.tls=true"
-      - "traefik.http.routers.jupyter.tls.certresolver=myresolver"
+
+#      - "traefik.http.routers.jupyter.entrypoints=websecure"
+#      - "traefik.http.routers.jupyter.tls=true"
+#      - "traefik.http.routers.jupyter.tls.certresolver=myresolver"
 #      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
 #      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
 #      - "traefik.http.routers.jupyter.middlewares=jupyter-sp"
