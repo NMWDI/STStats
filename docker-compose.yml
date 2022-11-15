@@ -58,6 +58,7 @@ services:
       - ./documentation:/documentation
     depends_on:
       - traefik
+      - static-files
   
     labels:
       - "traefik.enable=true"

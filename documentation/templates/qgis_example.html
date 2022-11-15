@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Plot locations directly in QGIS</h2>
+
+<ol>
+  <li>Add a Vector layer</li>
+  <li>Check Protocol to HTTP(s),cloud,etc</li>
+  <li>Set Type to "GeoJSON"</li>
+  <li>Set URI to `https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq 'NMBGMR'`</li>
+</ol>
+
+<img style="height: 200px"
+     src="{{ url_for('static', filename='qgis_data_source_manager_config.png' )}}"/>
+<img style="height: 600px"
+     src="{{ url_for('static', filename='qgis_example.png' )}}"/>
+
+{% endblock %}

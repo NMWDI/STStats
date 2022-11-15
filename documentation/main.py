@@ -11,6 +11,10 @@ def tutorial(page):
     return render_template(f'tutorial{page}.html',
                            page=page, page_description=page_description)
 
+@app.route("/qgis")
+def qgis():
+    return render_template("qgis_example.html")
+
 
 @app.route("/browser_examples")
 def examples():
