@@ -19,13 +19,9 @@ services:
       - "traefik.http.routers.jupyter.entrypoints=websecure"
       - "traefik.http.routers.jupyter.tls=true"
       - "traefik.http.routers.jupyter.tls.certresolver=myresolver"
-
-#      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
-#      - "traefik.http.routers.jupyter.middlewares=jupyter-sp"
-#      - "traefik.http.middlewares.jupyter-sp.stripprefix.prefixes=/jupyter"
-#      - "traefik.http.middlewares.jupyter-sp.stripprefix.forceSlash=false"
-#      - "traefik.http.routers.jupyter.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/jupyter`)"
+      - "traefik.http.routers.jupyter-insecure.middlewares=force-secure"
+      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
     restart: on-failure
 
   static-files:
@@ -38,13 +34,14 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.static-files.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/static`)"
       - "traefik.http.routers.static-files.entrypoints=websecure"
-      - "traefik.http.routers.static-files-insecure.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/static`)"
-      - "traefik.http.routers.static-files-insecure.entrypoints=web"
       - "traefik.http.routers.static-files.tls=true"
       - "traefik.http.routers.static-files.tls.certresolver=myresolver"
       - "traefik.http.middlewares.static-files.compress=true"
-#      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
+      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
+      - "traefik.http.routers.static-files-insecure.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/static`)"
+      - "traefik.http.routers.static-files-insecure.entrypoints=web"
+      - "traefik.http.routers.static-files-insecure.middlewares=force-secure"
     depends_on:
       - traefik
 
@@ -69,14 +66,14 @@ services:
       - "traefik.http.routers.documentation.tls=true"
       - "traefik.http.routers.documentation.tls.certresolver=myresolver"
       - "traefik.http.routers.documentation.middlewares=documentation-sp"
+      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
       - "traefik.http.routers.documentation-insecure.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/help`)"
       - "traefik.http.routers.documentation-insecure.entrypoints=web"
       - "traefik.http.middlewares.documentation-sp.stripprefix.prefixes=/help"
       - "traefik.http.middlewares.documentation-sp.stripprefix.forceSlash=false"
-      - "traefik.http.routers.documentation-insecure.middlewares=documentation-sp"
-#      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
-#      - "traefik.http.routers.documentation-insecure.middlewares=force-secure"
+      - "traefik.http.routers.documentation-insecure.middlewares=documentation-sp,force-secure"
+
     restart: on-failure
 
 
@@ -106,9 +103,9 @@ services:
       - "traefik.http.routers.api-insecure.rule=Host(`developer.newmexicowaterdata.org`) && PathPrefix(`/api/v1`)"
       - "traefik.http.routers.api-insecure.entrypoints=web"
       - "traefik.http.routers.api-insecure.middlewares=api-sp"
-#      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
-#      - "traefik.http.routers.api-insecure.middlewares=force-secure"
+      - "traefik.http.middlewares.force-secure.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.force-secure.redirectscheme.permanent=true"
+      - "traefik.http.routers.api-insecure.middlewares=force-secure"
     restart: on-failure
 
   traefik:
@@ -130,5 +127,4 @@ services:
       - "80:80"
       - "8080:8080"
     volumes:
-      #- "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
