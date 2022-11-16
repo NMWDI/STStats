@@ -12,7 +12,7 @@ ST2 = 'https://st2.newmexicowaterdata.org/FROST-Server/v1.1'
 
 
 def st_count(url, tag, f=None):
-    url = f'{url}/{tag}?$count=true&$top=1'
+    url = f'{url}/{tag}?$count=true&$top=0'
     if f:
         url = f'{url}&$filter={f}'
 
