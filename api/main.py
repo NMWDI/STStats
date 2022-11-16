@@ -72,15 +72,13 @@ def agency_gwl_observations(url, agency):
     obs = 0
     print(f'agency observations ==== {agency}')
     for i, locations in enumerate(agency_locations(url, agency)):
-        lobs = 0
         # for i, l in enumerate(locations[:1]):
         for j, l in enumerate(locations):
             for t in l['Things']:
                 for d in t['Datastreams']:
                     if d['name'] == 'Groundwater Levels':
-                        lobs += st_count(url, f"Datastreams({d['@iot.id']})/Observations")
-            obs += lobs
-            print(i*1000+j, l['name'], lobs, obs)
+                        obs += st_count(url, f"Datastreams({d['@iot.id']})/Observations")
+            print(i*1000+j, l['name'], obs)
         # break
 
     return obs
