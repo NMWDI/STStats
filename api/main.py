@@ -85,7 +85,7 @@ def agency_gwl_observations(url, agency):
 
 
 def agency_locations(url, agency):
-    return rget(f"{url}/Locations?$filter=properties/agency eq '{agency}'&$expand=Things/Datastreams")
+    return rget(f"{url}/Locations?$filter=properties/agency eq '{agency}'&$expand=Things/Datastreams&$orderby=name")
 
 
 def st_report(url, tag):
