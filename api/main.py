@@ -70,7 +70,7 @@ def aggregate_stats():
 
 def agency_gwl_observations(url, agency):
     obs = 0
-    # print('agency observations')
+    print('agency observations')
     for locations in agency_locations(url, agency):
         lobs = 0
         # for i, l in enumerate(locations[:1]):
@@ -80,7 +80,7 @@ def agency_gwl_observations(url, agency):
                     if d['name'] == 'Groundwater Levels':
                         lobs += st_count(url, f"Datastreams({d['@iot.id']})/Observations")
             obs += lobs
-            # print(i, l['name'], lobs, obs)
+            print(i, l['name'], lobs, obs)
         # break
 
     return obs
