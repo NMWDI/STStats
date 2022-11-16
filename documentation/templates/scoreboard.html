@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            {% if 'agency_counts' in sb %}
+            {% if sb %}
                 {% for agency, counts in sb['agency_counts'].items() %}
                 <tr>
                     <td>{{ agency }}</td>
