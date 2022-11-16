@@ -10,13 +10,15 @@
             </tr>
         </thead>
         <tbody>
-            {% for agency, counts in sb['agency_counts'].items() %}
-            <tr>
-                <td>{{ agency }}</td>
-                <td>{{ counts['locations'] }}</td>
-                <td>{{ counts['gwl_observations'] }}</td>
-            </tr>
-            {% endfor %}
+            {% if 'agency_counts' in sb %}
+                {% for agency, counts in sb['agency_counts'].items() %}
+                <tr>
+                    <td>{{ agency }}</td>
+                    <td>{{ counts['locations'] }}</td>
+                    <td>{{ counts['gwl_observations'] }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
 {% endblock %}
