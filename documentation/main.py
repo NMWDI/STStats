@@ -23,7 +23,7 @@ def examples():
 
 @app.route("/scoreboard")
 def scoreboard():
-    resp = requests.get('http://host.docker.internal:8000/st2_report')
+    resp = requests.get('http://developer.newmexicowaterdata.org/api/v1/st2_report')
     sb = {}
     if resp.status_code == 200:
         sb = resp.json()
