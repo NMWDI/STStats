@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -20,10 +21,17 @@ def qgis():
 def examples():
     return render_template('browser_examples.html')
 
+@app.route("/scoreboard")
+def scoreboard():
+    resp = requests.get('http://host.docker.internal:8000/st2_report')
+    sb = {}
+    if resp.status_code == 200:
+        sb = resp.json()
+    return render_template("scoreboard.html", sb=sb)
+
 
 @app.route("/")
 def help_link():
     return render_template('index.html')
-
 
 

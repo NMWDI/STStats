@@ -76,6 +76,8 @@ services:
       - "traefik.http.routers.api-insecure.rule=Host(`localhost`) && PathPrefix(`/api/v1`)"
       - "traefik.http.routers.api-insecure.entrypoints=web"
       - "traefik.http.routers.api-insecure.middlewares=api-sp"
+      - "traefik.http.middlewares.api-sp.stripprefix.prefixes=/api/v1"
+      - "traefik.http.middlewares.api-sp.stripprefix.forceSlash=false"
     restart: on-failure
 
   traefik:

@@ -14,7 +14,7 @@ ST2 = 'https://st2.newmexicowaterdata.org/FROST-Server/v1.1'
 def st_count(url, tag, f=None):
     url = f'{url}/{tag}?$count=true&$top=1'
     if f:
-        url = f'{url}&{f}'
+        url = f'{url}&$filter={f}'
 
     resp = requests.get(url)
     if resp.status_code == 200:
@@ -38,28 +38,56 @@ last_time = None
 cached_report = None
 
 
-def aggregate_stats():
-    def rget(url):
-        resp = requests.get(url)
-        if resp.status_code == 200:
-            rj = resp.json()
-            nextlink = rj.get('@iot.nextLink')
-            yield rj['value']
-            if nextlink:
-                yield from rget(nextlink)
+def rget(url):
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        rj = resp.json()
+        nextlink = rj.get('@iot.nextLink')
+        yield rj['value']
+        if nextlink:
+            yield from rget(nextlink)
 
+
+def aggregate_stats():
     names = []
     for v in rget(f'{ST2}/Datastreams?$select=name'):
         for vi in v:
             if vi['name'] not in names:
                 names.append(vi['name'])
 
-    agencies = Counter()
+    ag = Counter()
     for v in rget(f'{ST2}/Locations?$select=properties'):
         for vi in v:
-            agencies.update((vi['properties']['agency'],))
+            ag.update((vi['properties']['agency'],))
 
-    return {'datastream_names': names, 'agencies_location_counts': agencies}
+    agency_counts = {}
+    for k, v in ag.items():
+        agency_counts[k] = {'locations': v, 'gwl_observations': agency_gwl_observations(ST2, k)}
+
+    return {'datastream_names': names,
+            'agency_counts': agency_counts}
+
+
+def agency_gwl_observations(url, agency):
+    obs = 0
+    # print('agency observations')
+    for locations in agency_locations(url, agency):
+        lobs = 0
+        # for i, l in enumerate(locations[:1]):
+        for i, l in enumerate(locations):
+            for t in l['Things']:
+                for d in t['Datastreams']:
+                    if d['name'] == 'Groundwater Levels':
+                        lobs += st_count(url, f"Datastreams({d['@iot.id']})/Observations")
+            obs += lobs
+            # print(i, l['name'], lobs, obs)
+        # break
+
+    return obs
+
+
+def agency_locations(url, agency):
+    return rget(f"{url}/Locations?$filter=properties/agency eq '{agency}'&$expand=Things/Datastreams")
 
 
 def st_report(url, tag):
@@ -89,7 +117,7 @@ def st_report(url, tag):
                   "things": st2_count("Things"),
                   "datastreams": st2_count("Datastreams"),
                   "observations": st2_count("Observations"),
-                  "depth_to_water_datastreams": st2_count("Datastreams", f="$filter=name eq 'Groundwater Levels'"),
+                  "depth_to_water_datastreams": st2_count("Datastreams", f="name eq 'Groundwater Levels'"),
                   "observed_properties": obsprops,
                   "min_observed_datetime": mind,
                   "max_observed_datetime": maxd,
@@ -100,14 +128,16 @@ def st_report(url, tag):
                   }
         report.update(agg_stats)
         cached_report = report
-        # print(f'report generation complete {time.time()-last_time}')
+        # print(f'report generation complete {time.time() - last_time}')
+
+    # print(cached_report)
     return cached_report
 
 
 def st_report_poll():
     while 1:
         st_report(ST2, 'st2')
-        time.sleep(60)
+        time.sleep(300)
 
 
 t = Thread(target=st_report_poll)
@@ -189,6 +219,7 @@ DATASTREAM_SCHEMA = {
         }
     }
 }
+
 
 @app.get('/st2_validate')
 async def get_st2_validation():

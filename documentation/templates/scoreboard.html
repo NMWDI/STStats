@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Agency</th>
+                <th>Locations</th>
+                <th>Groundwater Observations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agency, counts in sb['agency_counts'].items() %}
+            <tr>
+                <td>{{ agency }}</td>
+                <td>{{ counts['locations'] }}</td>
+                <td>{{ counts['gwl_observations'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
