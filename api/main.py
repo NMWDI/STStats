@@ -137,7 +137,7 @@ def st_report(url, tag):
 def st_report_poll():
     while 1:
         st_report(ST2, 'st2')
-        time.sleep(300)
+        time.sleep(3600)
 
 
 t = Thread(target=st_report_poll)
