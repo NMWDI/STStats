@@ -56,15 +56,20 @@ def aggregate_stats():
                 names.append(vi['name'])
 
     ag = Counter()
-    for v in rget(f'{ST2}/Locations?$select=properties'):
+    thing_names = []
+    for v in rget(f'{ST2}/Locations?$select=properties&$expand=Things'):
         for vi in v:
             ag.update((vi['properties']['agency'],))
+            for t in vi['Things']:
+                if t['name'] not in thing_names:
+                    thing_names.append(t['name'])
 
     agency_counts = {}
     for k, v in ag.items():
         agency_counts[k] = {'locations': v, 'gwl_observations': agency_gwl_observations(ST2, k)}
 
     return {'datastream_names': names,
+            'thing_names': thing_names,
             'agency_counts': agency_counts}
 
 
