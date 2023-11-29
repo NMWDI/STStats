@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>API Store</h1>
+    {% for api in apis %}
+        <div class="api">
+            <table class="table">
+                <tr>
+                    <td style="width: 33%">
+                        {{ api.name }}
+                    </td>
+                    <td style="width: 33%">
+                        <a href="{{ api.url }}">{{ api.url }}</a>
+                    </td>
+                    <td>
+                        {{ api.description }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+
+{% endblock %}

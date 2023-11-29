@@ -40,18 +40,41 @@ def examples():
 
     return render_template('browser_examples.html', examples=examples)
 
+@app.route("/apistore")
+def apistore():
 
-@app.route("/scoreboard")
-def scoreboard():
-    resp = requests.get('http://developer.newmexicowaterdata.org/api/v1/st2_report')
-    sb = {}
-    if resp.status_code == 200:
-        sb = resp.json()
-    return render_template("scoreboard.html", sb=sb)
+    apis = [dict(name="ST2",
+                 description="New Mexico Water Data Initiative",
+                 url="https://st2.newmexicowaterdata.org/FROST-Server/v1.1"),
+            dict(name="USGS NWIS",
+                 description="National Water Information System",
+                 url="https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/"),
+            dict(name="DWW",
+                 description="New Mexico Environment Department Drinking Water Watch",
+                 url="https://nmenv.newmexicowaterdata.org/FROST-Server/v1.1"),
+            dict(name="OSE RealTime Measurements",
+                 description="New Mexico Office of the State Engineer RealTime Measurements",
+                 url="https://meterexttest.oseisc.org/extmrintake/api/meas_readings/148")
+            ]
+
+    return render_template("apistore.html",
+                           apis=apis)
+# @app.route("/scoreboard")
+# def scoreboard():
+#     resp = requests.get('http://developer.newmexicowaterdata.org/api/v1/st2_report')
+#     sb = {}
+#     if resp.status_code == 200:
+#         sb = resp.json()
+#     return render_template("scoreboard.html", sb=sb)
 
 
 @app.route("/")
 def help_link():
+    return render_template('index.html')
+
+
+@app.route("/help")
+def help():
     return render_template('index.html')
 
 
