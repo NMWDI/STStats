@@ -3,3 +3,23 @@
   background-color: #e7f3fe;
   border-left: 6px solid #2196F3;
 }
+
+.api-example {
+  background-color: #e7f3fe;
+  border-left: 6px solid #2196F3;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.dataset_textbox {
+  background-color: #e7f3fe;
+  /*border-left: 6px solid #2196F3;*/
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.dataset {
+  background-color: #4579a9;
+  border-left: 6px solid #224bb4;
+  padding: 10px;
+  margin-bottom: 10px;
+}

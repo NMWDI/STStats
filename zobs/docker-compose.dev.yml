@@ -1,21 +1,21 @@
 version: "3.9"
 services:
-  juypter:
-    build:
-      context: ./jupyter/
-      dockerfile: ./Dockerfile
-    depends_on:
-      - traefik
-    command: bash -c "
-      jupyter lite serve --port 8008
-      "
-    ports:
-      - "8008:8008"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.jupyter-insecure.rule=Host(`localhost`)"
-      - "traefik.http.routers.jupyter-insecure.entrypoints=web"
-    restart: on-failure
+#  juypter:
+#    build:
+#      context: ./jupyter/
+#      dockerfile: ./Dockerfile
+#    depends_on:
+#      - traefik
+#    command: bash -c "
+#      jupyter lite serve --port 8008
+#      "
+#    ports:
+#      - "8008:8008"
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.jupyter-insecure.rule=Host(`localhost`)"
+#      - "traefik.http.routers.jupyter-insecure.entrypoints=web"
+#    restart: on-failure
 
   static-files:
     # nginx config
@@ -89,6 +89,6 @@ services:
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-      - "8080:8080"
+      - "8082:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"

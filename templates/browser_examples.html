@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>API Examples</h1>
+    {% for message, href in examples  %}
+        <div class="api-example">
+            {{ message }}<br/>
+            <a href="{{ href }}">
+                <code>
+                    {{ href }}
+                </code>
+            </a>
+        </div>
+    {% endfor %}
+
+
+    <div>
+        For more query option examples see <a href="https://developers.sensorup.com/docs/#queryparameters">ST docs</a>
+    </div>
+{% endblock %}

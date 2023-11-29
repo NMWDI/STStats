@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Datasets</h1>
+        {% for dataset in datasets %}
+            <div class="dataset">
+                <h2>{{ dataset.name }}</h2>
+                <p class="dataset_textbox">{{ dataset.description }}</p>
+                <pre><code class="python">{{ dataset.text }}</code></pre>
+            </div>
+
+        {% endfor %}
+{% endblock %}
+

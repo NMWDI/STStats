@@ -22,7 +22,7 @@ Lets not mess around. Just show me how to retrieve data via the API
 
 The following snippet shows how to retrieve Locations associated with NMBGMR in the ST2 service.
 <pre>
-    <code>import requests
+    <code class="python">import requests
 url = "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq 'NMBGMR'"
 resp = requests.get(url)
 if resp.status_code==200:
@@ -30,25 +30,23 @@ if resp.status_code==200:
     </code>
 </pre>
 
-<div class="note"> See the <a href="/help/tutorial/0">Tutorial</a> for more info</div>
-
 
 <hr/>
 <h1>Links</h1>
 <h2>API User</h2>
 <ul>
     <li><a href="https://github.com/NMWDI">NMWDI Project</a> - Link to the NMWDI GitHub Organization page</li>
-    <li><a href="http://developer.newmexicowaterdata.org/api/v1/st2_report">Whats in ST2?</a></li>
-    <li><a href="/">Jupyter</a> - A set of interactive
-        examples/templates and environment to execute them in. Examples include how to download a set of locations
-        as a csv and find all locations for a given agency.</li>
+{#    <li><a href="http://developer.newmexicowaterdata.org/api/v1/st2_report">Whats in ST2?</a></li>#}
+{#    <li><a href="/">Jupyter</a> - A set of interactive#}
+{#        examples/templates and environment to execute them in. Examples include how to download a set of locations#}
+{#        as a csv and find all locations for a given agency.</li>#}
     <li><a href="https://developers.sensorup.com/">SensorThings Developer Center</a></li>
     <li><a href="https://developers.sensorup.com/docs/#introduction">SensorThings Documentation</a></li>
     <li><a href="https://fraunhoferiosb.github.io/FROST-Server/">FROST Server</a> - An implementation of the
         SensorThings specification</li>
     <li><a href="https://github.com/FraunhoferIOSB/FROST-Python-Client">FROST Python Client</a> - A python client
         for interacting with a FROST server</li>
-    <li><a href="http://developer.newmexicowaterdata.org/api/v1/docs">NMWDI Developer API</a></li>
+{#    <li><a href="http://developer.newmexicowaterdata.org/api/v1/docs">NMWDI Developer API</a></li>#}
     <li><a href="https://github.com/NMWDI/examples">Example scripts</a></li>
     <li><a href="https://labs.waterdata.usgs.gov/docs/sensorthings/index.html">USGS SensorThings Implementation</a></li>
 </ul>
