@@ -46,15 +46,21 @@ def apistore():
     apis = [dict(name="ST2",
                  description="New Mexico Water Data Initiative",
                  url="https://st2.newmexicowaterdata.org/FROST-Server/v1.1"),
-            dict(name="USGS NWIS",
-                 description="National Water Information System",
-                 url="https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/"),
             dict(name="DWW",
                  description="New Mexico Environment Department Drinking Water Watch",
                  url="https://nmenv.newmexicowaterdata.org/FROST-Server/v1.1"),
             dict(name="OSE RealTime Measurements",
                  description="New Mexico Office of the State Engineer RealTime Measurements",
-                 url="https://meterexttest.oseisc.org/extmrintake/api/meas_readings/148")
+                 url="https://meterexttest.oseisc.org/extmrintake/api/meas_readings/148"),
+            dict(name="USGS NWIS",
+                 description="National Water Information System",
+                 url="https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/"),
+            dict(name="WQP",
+                 description="Water Quality Portal",
+                 url="https://www.waterqualitydata.us/webservices_documentation/"),
+            dict(name="CoCoRaHS",
+                 description="Community Collaborative Rain, Hail & Snow Network",
+                 url="https://data.cocorahs.org/cocorahs/Export/ExportManager.aspx")
             ]
 
     return render_template("apistore.html",
