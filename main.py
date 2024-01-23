@@ -38,7 +38,12 @@ def examples():
                     "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Datastreams?$filter=name eq 'Groundwater level(Pressure)'"),
                     ]
 
-    return render_template('browser_examples.html', st2_examples=st2_examples)
+    cocorahs_examples = [("Get all results for station NM-DA-265 from 2024-01-01 to present",
+                         "https://data.cocorahs.org/export/exportreports.aspx?Format=json&ReportType=Daily&ResponseFields=all&stations=NM-DA-265&ReportDateType=timestamp&Date=01/10/2024"),
+                         ("Get all results for station NM-BR-2 for 2023-11-28",
+                         "https://data.cocorahs.org/export/exportreports.aspx?Format=json&ReportType=Daily&ResponseFields=all&stations=NM-BR-2&ReportDateType=reportdate&Date=11/28/2023")]
+
+    return render_template('browser_examples.html', st2_examples=st2_examples, cocorahs_examples=cocorahs_examples)
 
 @app.route("/apistore")
 def apistore():
