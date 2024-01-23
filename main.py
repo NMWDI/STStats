@@ -23,22 +23,27 @@ def qgis():
 
 @app.route("/browser_examples")
 def examples():
-    examples = [('Get all Locations from EBID',
-                 "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq 'EBID'"),
-                ('Get all Locations and Things from EBID',
-                 "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq "
-                 "'EBID'&$expand=Things"),
-                ("Get all Locations and Things with a Location name that startswith 'AR-'<br/>",
-                 "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=startswith(name,"
-                 "'AR-')&$expand=Things"),
-                ("Get all Locations and Things within a given bounding box defined by latitudes and longitudes",
-                 "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=st_within(location, "
-                 "geography'POLYGON((-106.9466 34.1201,-106.8038 34.1201,-106.8038 34.0086,-106.9466 34.0086,-106.9466 34.1201))')&$expand=Things"),
-                ("Get all datastreams with name 'Groundwater level(Pressure)'",
-                 "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Datastreams?$filter=name eq 'Groundwater level(Pressure)'"),
-                ]
+    st2_examples = [('Get all Locations from EBID',
+                    "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq 'EBID'"),
+                    ('Get all Locations and Things from EBID',
+                    "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=properties/agency eq "
+                    "'EBID'&$expand=Things"),
+                    ("Get all Locations and Things with a Location name that startswith 'AR-'<br/>",
+                    "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=startswith(name,"
+                    "'AR-')&$expand=Things"),
+                    ("Get all Locations and Things within a given bounding box defined by latitudes and longitudes",
+                    "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Locations?$filter=st_within(location, "
+                    "geography'POLYGON((-106.9466 34.1201,-106.8038 34.1201,-106.8038 34.0086,-106.9466 34.0086,-106.9466 34.1201))')&$expand=Things"),
+                    ("Get all datastreams with name 'Groundwater level(Pressure)'",
+                    "https://st2.newmexicowaterdata.org/FROST-Server/v1.1/Datastreams?$filter=name eq 'Groundwater level(Pressure)'"),
+                    ]
 
-    return render_template('browser_examples.html', examples=examples)
+    cocorahs_examples = [("Get all results for station NM-DA-265 from 2024-01-01 to present",
+                         "https://data.cocorahs.org/export/exportreports.aspx?Format=json&ReportType=Daily&ResponseFields=all&stations=NM-DA-265&ReportDateType=timestamp&Date=01/10/2024"),
+                         ("Get all results for station NM-BR-2 for 2023-11-28",
+                         "https://data.cocorahs.org/export/exportreports.aspx?Format=json&ReportType=Daily&ResponseFields=all&stations=NM-BR-2&ReportDateType=reportdate&Date=11/28/2023")]
+
+    return render_template('browser_examples.html', st2_examples=st2_examples, cocorahs_examples=cocorahs_examples)
 
 @app.route("/apistore")
 def apistore():
@@ -46,15 +51,21 @@ def apistore():
     apis = [dict(name="ST2",
                  description="New Mexico Water Data Initiative",
                  url="https://st2.newmexicowaterdata.org/FROST-Server/v1.1"),
-            dict(name="USGS NWIS",
-                 description="National Water Information System",
-                 url="https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/"),
             dict(name="DWW",
                  description="New Mexico Environment Department Drinking Water Watch",
                  url="https://nmenv.newmexicowaterdata.org/FROST-Server/v1.1"),
             dict(name="OSE RealTime Measurements",
                  description="New Mexico Office of the State Engineer RealTime Measurements",
-                 url="https://meterexttest.oseisc.org/extmrintake/api/meas_readings/148")
+                 url="https://meterexttest.oseisc.org/extmrintake/api/meas_readings/148"),
+            dict(name="USGS NWIS",
+                 description="National Water Information System",
+                 url="https://waterservices.usgs.gov/docs/instantaneous-values/instantaneous-values-details/"),
+            dict(name="WQP",
+                 description="Water Quality Portal",
+                 url="https://www.waterqualitydata.us/webservices_documentation/"),
+            dict(name="CoCoRaHS",
+                 description="Community Collaborative Rain, Hail & Snow Network",
+                 url="https://data.cocorahs.org/cocorahs/Export/ExportManager.aspx")
             ]
 
     return render_template("apistore.html",
