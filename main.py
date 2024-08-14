@@ -65,7 +65,10 @@ def apistore():
                  url="https://www.waterqualitydata.us/webservices_documentation/"),
             dict(name="CoCoRaHS",
                  description="Community Collaborative Rain, Hail & Snow Network",
-                 url="https://data.cocorahs.org/cocorahs/Export/ExportManager.aspx")
+                 url="https://data.cocorahs.org/cocorahs/Export/ExportManager.aspx"),
+            dict(name="AMPAPI",
+                 description="Aquifer Mapping Program API",
+                 url="https://waterdata.nmt.edu")
             ]
 
     return render_template("apistore.html",
